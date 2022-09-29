@@ -1,0 +1,8 @@
+security:
+  cors-allowed-origins: "*"
+
+
+spring:
+  cloud:
+    function:
+      definition: uppercase
