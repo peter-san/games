@@ -1,0 +1,38 @@
+.street {
+    width: 8%;
+    height: 1%;
+    border: 1px solid darkblue;
+    background-color: lightgrey;
+    position: absolute;
+
+
+    .harbor {
+        width: 70%;
+        height: 430%;
+        border-radius: 50%;
+        border: 1px solid rgb(235, 250, 255);
+        color: beige;
+        background-size: cover;
+        position: fixed;
+    }
+
+
+    .number {
+        
+        top: 30%;
+        
+        position: fixed;
+        width: 40%;
+        height: 40%;
+    }
+
+    .harbor.left {
+        top: -530%;
+        left: 20%;
+    }
+    .harbor.right {
+        top: 150%;
+        left: 20%;
+    }
+    
+}

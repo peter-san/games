@@ -1,0 +1,41 @@
+.market {
+  display: grid;
+  grid-template-areas:
+    "resources  price                price               ware"
+    "resources  selected-resources   selected-ware       ware"
+    "resources  buttons              buttons             ware";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 9fr 1fr;
+}
+
+.ware {
+  background-color: aqua;
+  grid-area: ware;
+  min-width: 120px;
+}
+
+.resources {
+  grid-area: resources;
+  min-width: 120px;
+}
+
+.selectedWare {
+  grid-area: selected-ware;
+  min-width: 120px;
+}
+
+.selectedResources {
+  grid-area: selected-resources;
+  min-width: 120px;
+}
+
+.buttons {
+  grid-area: buttons;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.price {
+  grid-area: price;
+  text-align: center;
+}

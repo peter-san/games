@@ -1,0 +1,61 @@
+.dialog {
+  display: grid;
+  grid-template-areas:
+    "message  button"
+    "cards    cards";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 9fr;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: message;
+  margin: auto;
+  font-size: 120%;
+}
+
+.cards {
+  // background-color: grey;
+  grid-area: cards;
+  min-width: 120px;
+}
+
+.selected {
+  grid-area: selected;
+  min-width: 120px;
+}
+
+.buttons {
+  grid-area: buttons;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.container {
+
+    display: flex;
+    // padding: 15px;
+    // border: 2px solid;// teal;
+    // margin-top: 15px;
+    justify-content: center;
+    margin:  10px auto 5px auto;
+    align-content: flex-start;
+    align-items: center;
+
+    .card:hover {
+      border-color: cyan;
+      border-width: 3px;
+    }
+
+    // width: 90%;
+
+    .amount {
+      margin-left: 5px;
+      color: red;
+      font-size: larger;
+    }
+
+}
+

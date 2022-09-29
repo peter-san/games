@@ -1,0 +1,51 @@
+.dialog {
+  display: grid;
+  grid-template-areas:
+    "message    message message   message"
+    "resources  selected expected  ware"
+    "buttons    buttons buttons   buttons";
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 9fr 1fr;
+
+  z-index: 99999;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: message;
+  margin: auto;
+  font-size: 120%;
+}
+
+
+.resources {
+  grid-area: resources;
+  min-width: 100px;
+}
+
+.selected {
+  grid-area: selected;
+  min-width: 100px;
+}
+
+.expected {
+  grid-area: expected;
+  min-width: 100px;
+}
+
+.ware {
+  grid-area: ware;
+  grid-area: ware;
+  min-width: 100px;
+}
+
+.buttons {
+  grid-area: buttons;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+
+

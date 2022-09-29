@@ -1,0 +1,87 @@
+.tile {
+  position: absolute;
+  font-size: small;
+  //font-family: 'Gill Sans';
+
+  .content {
+    position: relative;
+    width:100%;
+    height: 100%;
+    background-image: url('/static/image/hex_braun.png');
+    background-size: contain;
+  
+    .type {
+      position: absolute;
+      background-size: 120%;
+      width: 88%;
+      height: 74%;
+      border-radius: 12em;
+      left: 6%;
+      top: 12.5%;  
+      text-align: center;
+    }
+
+    .value {
+      position: absolute;
+      //background-size: contain;
+      background-color: beige;
+      // font-size: 1.2vmax;
+      //font-weight: 100;
+      color: lightcoral;
+      border: 1px solid lightcoral;
+      width: 30%;
+      height: 25%;
+      //padding: 3.5%;
+      border-radius: 50%;
+      //text-align: center;
+
+      //font-family: 'Bowlby One SC', cursive;
+      //font-size: 0.7vw;
+    
+      left: 35%;
+      top: 35%;  
+
+    }
+
+    .number {
+      margin: 26%;
+      position: absolute;
+      width: 45%;
+      height: 45%;
+    }
+
+    .number1 {
+      left: -15%;
+    }
+    .number2 {
+      left: 15%;
+    }
+
+    .robber {
+      width: 60%;
+      height: 60%;
+      border-radius: 20%;
+      position: absolute;
+      background-size: cover;
+      background-image: url('/static/image/robber2.png');
+      left: 20%;
+      top: 15%; 
+    }
+    .robberSelection {
+      width: 33%;
+      height: 33%;
+      border-radius: 30%;
+      position: absolute;
+      left: 33%;
+      top: 31%; 
+      border: 6px solid yellow;
+      background-color: rgba(yellowgreen, 0.3);
+    }
+  }
+
+  .content.diced {
+    background-image: url('/static/image/hex-diced.png');
+  }
+
+
+}

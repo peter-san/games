@@ -1,0 +1,22 @@
+.item {
+    display: flex;
+    padding: 15px;
+    border: 2px solid;// teal;
+    margin-top: 15px;
+    justify-content: space-evenly;
+    align-content: flex-start;
+    width: 90%;
+
+}
+
+.started {
+    border-color: green;
+}
+
+.created {
+    border-color: yellow;
+}
+
+.finished {
+    border-color: red; 
+}

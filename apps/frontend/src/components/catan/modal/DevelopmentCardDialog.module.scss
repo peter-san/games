@@ -1,0 +1,35 @@
+.dialog {
+  display: grid;
+  grid-template-areas:
+    "message    message"
+    "resources  selected"
+    "buttons    buttons";
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 9fr 1fr;
+}
+
+.message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-area: message;
+  margin: auto;
+  font-size: 120%;
+}
+
+.resources {
+  background-color: aqua;
+  grid-area: resources;
+  min-width: 120px;
+}
+
+.selected {
+  grid-area: selected;
+  min-width: 120px;
+}
+
+.buttons {
+  grid-area: buttons;
+  margin-left: 10px;
+  margin-right: 10px;
+}

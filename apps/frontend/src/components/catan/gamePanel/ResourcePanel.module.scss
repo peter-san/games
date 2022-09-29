@@ -1,0 +1,40 @@
+.resources {
+
+    margin-left: 30px;
+    .resource {
+        color: grey;
+        font-size: medium;
+        padding-right: 5px;
+        height: 80%;
+
+        .icon {
+          
+          width: 35px;
+          height: 35px;
+          display: inline-block;
+          background-size: cover;
+          vertical-align: middle;
+      
+          &.lumber {
+            background-image: url("../../../static/image/resource/lumber.png");
+          }
+      
+          &.brick {
+            background-image: url("../../../static/image/resource/brick.png");
+          }
+      
+          &.wool {
+            background-image: url("../../../static/image/resource/wool.png");
+          }
+      
+          &.ore {
+            background-image: url("../../../static/image/resource/ore.png");
+          }
+      
+          &.grain {
+            background-image: url("../../../static/image/resource/grain.png");
+          }
+        }
+      }
+}
+
