@@ -2,7 +2,6 @@ package petersan.games.catan.core
 
 import petersan.games.catan.*
 import petersan.games.catan.Game.State.*
-import petersan.games.catan.core.action.CloseAction
 import petersan.games.catan.core.action.CreateAction
 import petersan.games.catan.core.action.JoinAction
 import kotlin.random.Random

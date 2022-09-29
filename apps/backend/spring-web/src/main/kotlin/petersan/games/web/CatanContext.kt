@@ -12,13 +12,10 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Primary
 import org.springframework.messaging.simp.SimpMessagingTemplate
 import petersan.games.catan.*
-import petersan.games.catan.core.DevelopmentCardService
-import petersan.games.catan.core.GamesService
-import petersan.games.catan.core.MarketService
 
 import petersan.games.catan.Notifier.Update
 import petersan.games.catan.Notifier.Update.Type.*
-import petersan.games.catan.core.ConstructionService
+import petersan.games.catan.core.*
 
 @Configuration
 class CatanContext {

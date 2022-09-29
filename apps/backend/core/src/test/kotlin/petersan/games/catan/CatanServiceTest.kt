@@ -5,6 +5,7 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import petersan.games.catan.core.CatanService
 import petersan.games.catan.core.action.DiceAction
 import petersan.games.catan.model.Resource
 import kotlin.random.Random

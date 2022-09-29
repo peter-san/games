@@ -7,14 +7,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import petersan.games.catan.*
-import petersan.games.catan.core.DevelopmentCardService
-import petersan.games.catan.core.MarketService
 import com.amazonaws.services.eventbridge.AmazonEventBridgeClient
 import com.amazonaws.services.eventbridge.model.PutEventsRequest
 import com.amazonaws.services.eventbridge.model.PutEventsRequestEntry
 import com.amazonaws.services.eventbridge.model.PutEventsResult
-import petersan.games.catan.core.ConstructionService
-import petersan.games.catan.core.GamesService
+import petersan.games.catan.core.*
 
 @Configuration
 class CatanContext(private val jackson: ObjectMapper) {

@@ -1,7 +1,7 @@
 package petersan.games.catan.core.action
 
 import petersan.games.catan.*
-import petersan.games.catan.CatanServiceBase.GameContext
+import petersan.games.catan.core.CatanServiceBase.GameContext
 import petersan.games.catan.Game.State.*
 import petersan.games.catan.core.action.Action.Type.*
 

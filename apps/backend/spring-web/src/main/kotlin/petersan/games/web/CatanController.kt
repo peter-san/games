@@ -3,6 +3,7 @@ package petersan.games.web
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import petersan.games.catan.*
+import petersan.games.catan.core.CatanService
 import petersan.games.catan.core.GamesService
 
 data class GameRequest(val standard: Boolean = true, val players: Map<Color, String>)
@@ -35,15 +36,14 @@ class CatanGamesController(val games: GamesService) {
 class CatanController(val games: CatanService) {
 
     @GetMapping
-    fun game(@PathVariable id: Int, @RequestHeader headers: Map<String, String>): Game {
-        println(headers)
+    fun game(@PathVariable id: Int): Game {
         return games.game(id)
     }
 
-    @PutMapping
-    fun replace(@PathVariable id: Int, @RequestBody request: GameRequest, @RequestHeader headers: Map<String, String>): Game {
-        return games.create(id, request.standard, request.players)
-    }
+//    @PutMapping
+//    fun replace(@PathVariable id: Int, @RequestBody request: GameRequest, @RequestHeader headers: Map<String, String>): Game {
+//        return games.create(id, request.standard, request.players)
+//    }
 
     @PostMapping("/roll")
     fun roll(@PathVariable id: Int, @AuthenticationPrincipal principal: String, @RequestHeader headers: Map<String, String>): Game {

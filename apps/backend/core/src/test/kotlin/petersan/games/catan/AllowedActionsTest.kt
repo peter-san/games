@@ -9,6 +9,7 @@ import org.assertj.core.api.Assertions.assertThat
 import petersan.games.catan.core.action.Action.Type.*
 import petersan.games.catan.model.Resource.*
 import petersan.games.catan.Color.*
+import petersan.games.catan.core.CatanService
 
 
 class AllowedActionsTest {

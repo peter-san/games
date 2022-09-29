@@ -1,6 +1,7 @@
 package petersan.games.catan
 
 import com.fasterxml.jackson.annotation.JsonValue
+import petersan.games.catan.core.CatanServiceBase
 import petersan.games.catan.model.Resource.*
 import petersan.games.catan.core.action.Action
 import petersan.games.catan.model.Resource
