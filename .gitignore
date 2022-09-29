@@ -10,3 +10,5 @@ cdk.out
 .build
 .idea
 .gradle
+
+apps/frontend/build/*
