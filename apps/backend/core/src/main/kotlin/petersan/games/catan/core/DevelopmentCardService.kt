@@ -7,6 +7,7 @@ import petersan.games.catan.model.*
 import petersan.games.catan.Notifier
 import petersan.games.catan.core.action.*
 import petersan.games.catan.core.action.Action.Type.*
+import petersan.games.catan.core.graph.GraphConstructor
 
 import kotlin.random.Random
 
@@ -49,8 +50,26 @@ class DevelopmentCardService(games: GameRepository, template: Notifier, random: 
         card.played = true
         ctx.game.fields.forEach { it.robber = it.x == position.x && it.y == position.y }
         card.played = true
+
+        ctx.game.players.forEach { (_, p) ->p.biggestArmy = false }
+        biggestArmy(ctx.game)?.also {
+            ctx.game.player(it).biggestArmy = true
+        }
+
         println("${ctx.color} played knight and moved robber to $position")
         KnightPlayedAction(position)
+    }
+
+
+    private fun biggestArmy(game: Game): Color? {
+
+        val biggestArmies = game.players
+            .map { it.key to it.value.cards.count { card -> card.type == DevelopmentCard.Type.KNIGHT && card.played } }
+            .filter { it.second < 3 }
+            .groupBy { it.second }
+            .maxBy { it.key }.value
+
+        return if (biggestArmies.isEmpty() || biggestArmies.size > 1) null else biggestArmies.first().first
     }
 
     fun playMonopole(id: Int, user: String, resource: Resource) = verifiedAction(id, user, PLAY_MONOPOLE) { ctx ->

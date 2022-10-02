@@ -14,13 +14,13 @@ class GamesService(games: GameRepository,  notifier: Notifier, random: Random = 
 
     fun all() = games.findAll().toList()
 
-    fun createGame(user: String, color: Color, random: Boolean): Game {
+    fun createGame(user: String, color: Color, standard: Boolean): Game {
 
         return games.save(GameFactory()
-            .produce(null, false, mapOf(color to user))
+            .produce(null, standard, mapOf(color to user))
             .apply {
                 state = CREATION
-                moves.last().actions.add(CreateAction(random))
+                moves.last().actions.add(CreateAction(standard))
                 updateAllowedActions()
             }).also {
             notifier.created(it)

@@ -2,6 +2,9 @@ package petersan.games.catan.core
 
 import petersan.games.catan.*
 import petersan.games.catan.core.action.*
+import petersan.games.catan.core.graph.Edge
+import petersan.games.catan.core.graph.GraphConstructor
+import petersan.games.catan.core.graph.Node
 import kotlin.random.Random
 
 abstract class CatanServiceBase(val games: GameRepository, val notifier: Notifier, val random: Random) {
@@ -27,16 +30,21 @@ abstract class CatanServiceBase(val games: GameRepository, val notifier: Notifie
         }
     }
 
+
+    private val recognizer = VictoryRecognizer()
+
+
     protected fun applyAction(game: Game, action: Action): Game {
 
-        return games.save(
-            game.apply {
-                game.moves.last().actions.add(action)
-                game.updateAllowedActions()
-            })
-            .also {
-                notifier.updated(game)
-            }
+        game.moves.last().actions.add(action)
+        recognizer.updateVictoryPoints(game)?.run {
+            game.state = Game.State.CLOSED
+            game.moves.last().actions.add(CloseAction(Game.State.CLOSED))
+        }
+
+        game.updateAllowedActions()
+
+        return games.save(game).also { notifier.updated(game) }
     }
 
     protected fun verifiedAction(

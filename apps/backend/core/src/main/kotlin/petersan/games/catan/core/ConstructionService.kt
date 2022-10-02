@@ -5,6 +5,9 @@ import petersan.games.catan.core.action.Action
 import petersan.games.catan.core.action.CityBoughtAction
 import petersan.games.catan.core.action.RoadBoughtAction
 import petersan.games.catan.core.action.TownBoughtAction
+import petersan.games.catan.core.graph.Graph
+import petersan.games.catan.core.graph.LongestPath
+import petersan.games.catan.core.graph.longestPath
 import petersan.games.catan.model.add
 import petersan.games.catan.model.minusAssign
 import kotlin.random.Random
@@ -32,7 +35,21 @@ class ConstructionService(games: GameRepository, template: Notifier, random: Ran
         }
 
         player.roads.add(line)
+
+        evaluateLongestRoad(ctx.game.players, ctx.graph)
+
         RoadBoughtAction(line)
+    }
+
+    val MIN_AMOUNT = 5
+    private fun evaluateLongestRoad(players: Map<Color, Player>, graph: Graph){
+
+        val map = players.keys.mapNotNull { graph.longestPath(it)?.run { it to this } ?: null }.toMap()
+        val max = map.maxByOrNull { (c,lp)->lp.length } !!
+        players.values.forEach { it.longestPath = null }
+        if(map.count { (c, lp)-> lp.length == max.value.length } == 1 && max.value.length >= MIN_AMOUNT) {
+            players[max.key]!!.longestPath = max.value.edges()
+        }
     }
 
     fun buyTown(id: Int, point: Point, user: String) = verifiedAction(id, user, Action.Type.BUY_TOWN) { context ->

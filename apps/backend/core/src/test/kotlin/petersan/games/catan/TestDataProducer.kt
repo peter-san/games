@@ -1,6 +1,7 @@
 package petersan.games.catan
 
 import petersan.games.catan.Color.*
+import petersan.games.catan.core.graph.GraphConstructor
 
 fun line(edgeKey: String): Line {
     val (f, s, t) = """(\d+)([><])(\d+)""".toRegex().find(edgeKey)!!.destructured
@@ -23,4 +24,8 @@ fun game(vararg areaKeys: String) = Game(
     harbors = emptyList(),
     moves = mutableListOf(Move(1, BLUE))
 )
+
+fun graph(vararg areaKeys: String, updater: (game: Game)->Unit) =
+    GraphConstructor().construct(game(*areaKeys).apply(updater))
+
 

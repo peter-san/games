@@ -22,7 +22,8 @@ export type PlayerType = {
     roads: Line[]
     resources: Resources
     cards: DevelopmentCard[]
-    allowedActions: ActionType[]
+    allowedActions: ActionType[],
+    longestPath?: string[]
 }
 
 export type Move = {

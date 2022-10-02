@@ -27,7 +27,12 @@ class InMemoryRepository : GameRepository {
             player(Color.RED).cards += DevelopmentCard(DevelopmentCard.Type.ROADS, false)
 
 
-            player(Color.RED).resources += mutableMapOf(Resource.ORE to 10, Resource.WOOL to 10, Resource.GRAIN to 10)
+            player(Color.RED).resources += mutableMapOf(
+                Resource.ORE to 10,
+                Resource.WOOL to 10,
+                Resource.GRAIN to 10,
+                Resource.LUMBER to 10,
+                Resource.BRICK to 10)
         },
         GameFactory().produce(2)
     ).associateBy { it.id!! }.toMutableMap()

@@ -5,6 +5,10 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.Test
 import petersan.games.catan.model.*
 import petersan.games.catan.Color.*
+import petersan.games.catan.core.graph.Edge
+import petersan.games.catan.core.graph.Graph
+import petersan.games.catan.core.graph.GraphConstructor
+import petersan.games.catan.core.graph.Node
 
 internal class GraphTest {
 
@@ -54,4 +58,9 @@ internal class GraphTest {
         assertThat( jacksonObjectMapper().readValue("""{"resource": "lumber"}""", Val::class.java).resource)
             .isEqualTo(Resource.LUMBER)
     }
+
+
+
+
+
 }

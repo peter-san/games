@@ -2,6 +2,7 @@ package petersan.games.catan.core
 
 import petersan.games.catan.*
 import petersan.games.catan.core.action.*
+import petersan.games.catan.core.graph.GraphConstructor
 import petersan.games.catan.model.Resources
 import petersan.games.catan.model.add
 import kotlin.random.Random
@@ -68,7 +69,7 @@ class CatanService(
             move.actions.add(CloseAction(Game.State.PLAY))
         } else if(game.state == Game.State.CREATION){
 
-            val defaultSetup = (move.actions.find { it is CreateAction } as CreateAction).default
+            val defaultSetup = (move.actions.find { it is CreateAction } as CreateAction).standard
 
             if(defaultSetup){
                 GameFactory().applyInitialization(game)

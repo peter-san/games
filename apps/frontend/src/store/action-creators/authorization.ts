@@ -14,7 +14,7 @@ export const setUsernameName = (user: CognitoUser) => {
     
     return async (dispatch: Dispatch<AuthenticationAction>) => {
         const username = user.getUsername()
-        //axios.defaults.headers[AUTH_HEADER] = username  
+        axios.defaults.headers[AUTH_HEADER] = username  
 
         // oauth2 authentication
         axios.defaults.headers['Authorization'] = user.getSignInUserSession()?.getIdToken().getJwtToken()
@@ -22,29 +22,6 @@ export const setUsernameName = (user: CognitoUser) => {
         dispatch({type: AuthenticationActionTypes.LOGIN, username})
     }
 }
-
-// export const login = (username: string) => {
-//     return async (dispatch: Dispatch<AuthenticationAction>) => {
-//         Auth.signIn(username, 'password'+username).then((result) => {
-//             console.log(`login: ${username}`)
-//             axios.defaults.headers[AUTH_HEADER] = username;
-//             dispatch({type: AuthenticationActionTypes.LOGIN, username})
-//             console.log(result)
-//        }).catch((err: Error) => {
-//             console.error(err.message)
-//             toast.error(err.message, {
-//                 autoClose: 1000,
-//             })})
-//     }
-    
-//     // return async (dispatch: Dispatch<AuthenticationAction>) => {
-//     //     console.log(`login: ${username}`)
-//     //     axios.defaults.headers[AUTH_HEADER] = username;
-        
-//     //     localStorage.setItem('authentication', username);
-//     //     dispatch({type: AuthenticationActionTypes.LOGIN, username})
-//     // }
-// }
 
 export const logout = () => {
     return async (dispatch: Dispatch<AuthenticationAction>) => {

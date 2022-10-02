@@ -11,17 +11,22 @@ export default function Street({ edge, onBuy, ...props }: any) {
   const horizontal = edge.from.y === edge.to.y;
   const even = edge.from.x % 2 !== edge.from.y % 2;
 
+  const bigger = edge.longestPath
+
   let angle = horizontal ? (even ? 30 : -30) : 90;
   let yOffset = horizontal
-    ? (even ? 2.3 : -3.6) //+ (props.onBuy ? -0.5 : 0)
+    ? (even ? 2.3 : -3.6) //+ (bigger ? -0.5 : 0)
     : 5.15;
-  let xOffset = horizontal ? 0.85 : -4.05// + (props.onBuy ? -0.4 : 0);
+  let xOffset = horizontal ? 0.85 : -4.05 
 
   const point = edge.from.position(radius);
 
   const styles: CSSProperties = {
     left: point.x + xOffset + "%",
     top: point.y + yOffset + "%",
+    //width: 8 + (bigger? 2:0) + "%",
+    height: 1 + (bigger? 0.4:0) + "%",
+
     transform: "rotate(" + angle + "deg)",
     backgroundColor: edge.street ? edge.street : "lightgrey",
   };
@@ -29,6 +34,7 @@ export default function Street({ edge, onBuy, ...props }: any) {
   if (props.onBuy) { styles.border = "1px dashed blue" }
 
   if(props.selected) {styles.border = "3px solid yellow"}
+  if(bigger) {styles.border = "1px solid white"}
 
   return (
     <div
@@ -47,7 +53,8 @@ export default function Street({ edge, onBuy, ...props }: any) {
           className={join(
             classes.harbor,
             edge.harbor.leftSide ? classes.left : classes.right,
-            edge.harbor.resource ? edge.harbor.resource : "three-to-one"
+            edge.harbor.resource ? edge.harbor.resource : "three-to-one",
+            bigger ? classes.bigger : undefined
           )}
         >
           {!edge.harbor.resource ?

@@ -1,21 +1,7 @@
-package petersan.games.catan
+package petersan.games.catan.core.graph
 
-
-class Node(val key: String, var content: Color? = null, var city: Boolean = false, var edges: List<Edge> = emptyList()) {
-    fun neighbours(): List<Node> = edges.map { if (it.from == this) it.to else it.from }
-}
-
-class Edge(val key: String, val from: Node, val to: Node, var content: Color? = null) {
-
-    fun neighbours(node: Node) = node.edges.filter { it != this }
-
-    fun fromNeighbours() = neighbours(from)
-    fun toNeighbours() = neighbours(to)
-}
-
-class Graph(val edges: Map<String, Edge>, val nodes: Map<String, Node>) {
-
-}
+import petersan.games.catan.Area
+import petersan.games.catan.Game
 
 class GraphConstructor() {
 
@@ -71,4 +57,3 @@ class GraphConstructor() {
         return Graph(edges, nodes);
     }
 }
-

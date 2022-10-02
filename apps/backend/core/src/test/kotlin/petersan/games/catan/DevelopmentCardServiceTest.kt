@@ -56,6 +56,7 @@ class DevelopmentCardServiceTest {
     fun testMonopoleCard() {
         val userGame = Game(
             id = 2,
+            state = Game.State.PLAY,
             fields = game.fields,
             players = mapOf(BLUE to Player("1"), ORANGE to Player("2"), RED to Player("3")),
             harbors = emptyList(),

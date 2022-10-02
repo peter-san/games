@@ -37,7 +37,7 @@ fun hasAction(actionType: Action.Type) = forbidden({ "$actionType needed" })
 val sevenDiced = forbidden({ "7 wasn't diced" }) { ctx -> ctx.move.actions.any { it is DiceAction && it.value == 7 } }
 val diced = forbidden({ "roll first" }) { ctx -> ctx.move.actions.any { it is DiceAction && it.value != 7 } }
 val dicedAndRobbed = diced or (sevenDiced and hasAction(MOVE_ROBBER))
-val meDicedAndRobbed = myTurn and (diced or (sevenDiced and hasAction(MOVE_ROBBER)))
+val meDicedAndRobbed = state(PLAY) and myTurn and (diced or (sevenDiced and hasAction(MOVE_ROBBER)))
 
 val hasResourcesForMarket = forbidden({ "not enough resources for market" }) {
     val resources = it.game.player(it.color).resources
@@ -58,6 +58,14 @@ fun itemsLeft(type: Construction) = forbidden({ "no items of type $type availabl
 fun hasCard(type: DevelopmentCard.Type) = forbidden({ "$type needed" })
 { it.game.player(it.color).cards.any { card -> card.type == type && !card.played } }
 
+fun hasOpenExchangeRequest() = forbidden({ "need open exchange request" }) {
+    it.move.actions.any { a ->
+        a is ExchangeRequestedAction && a.recipient == it.color &&
+                it.move.actions.none { resp -> resp is ExchangeResponseAction && a.requestId == resp.requestId }
+    }
+}
+
+
 
 fun Action.Type.isAllowed(ctx: GameContext): Exp? {
     val check = when (this) {
@@ -76,11 +84,10 @@ fun Action.Type.isAllowed(ctx: GameContext): Exp? {
         PLAY_ROADS -> meDicedAndRobbed and hasCard(DevelopmentCard.Type.ROADS)
         PLAY_MONOPOLE -> meDicedAndRobbed and hasCard(DevelopmentCard.Type.MONOPOLE)
 
-        BUY_TOWN -> (state(PLAY) and meDicedAndRobbed and enoughFor(Construction.TOWN) and itemsLeft(Construction.TOWN)) or
+        BUY_TOWN -> ( meDicedAndRobbed and enoughFor(Construction.TOWN) and itemsLeft(Construction.TOWN)) or
                 (state(INIT) and myTurn and noAction(BUY_TOWN))
 
-        BUY_ROAD -> (state(PLAY)
-                and meDicedAndRobbed
+        BUY_ROAD -> ( meDicedAndRobbed
                 and enoughFor(Construction.ROAD)
                 and itemsLeft(Construction.ROAD)
                 ) or (state(INIT)
@@ -90,6 +97,8 @@ fun Action.Type.isAllowed(ctx: GameContext): Exp? {
 
 
         BUY_CITY -> meDicedAndRobbed and enoughFor(Construction.CITY) and itemsLeft(Construction.CITY)
+        EXCHANGE_REQUEST -> meDicedAndRobbed
+        EXCHANGE_RESPONSE -> hasOpenExchangeRequest()
 
         else -> forbidden({ "unsupported" }) { false }
     }

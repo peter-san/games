@@ -9,7 +9,7 @@ import {ICertificate} from 'aws-cdk-lib/aws-certificatemanager';
 
 interface APIStackProps extends cdk.StackProps {
     userPool: cognito.UserPool;
-    certificate: ICertificate
+    //certificate: ICertificate
     dummyFunction: lambda.Function;
 }
 

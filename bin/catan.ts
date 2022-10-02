@@ -27,8 +27,7 @@ const dynamo = new DynamoStack(app, "CatanDynamoStack")
 const auth = new AuthStack(app, "CatanAuthenticationStack")
 
 const websockets = new WebsocketApiStack(app, "CatanWebSocketApiStack", {
-  userPool: auth.userPool,
-  certificate: base.certificate
+  userPool: auth.userPool
 })
 
 const lambda = new LambdaStack(app, "CatanLambdaStack", {
@@ -38,13 +37,10 @@ const lambda = new LambdaStack(app, "CatanLambdaStack", {
 
 const api = new APIStack(app, "CatanApiStack", {
   userPool: auth.userPool,
- // timeFunction: lambda.timeFunction,
-  dummyFunction: lambda.backend,
-  certificate: base.certificate
+  dummyFunction: lambda.backend
 })
 
 new FrontendStack(app, "CatanFrontendStack", {})
-
 
 new NewFrontendStack(app, "CatanNewFrontendStack")
 

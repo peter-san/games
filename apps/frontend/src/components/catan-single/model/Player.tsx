@@ -1,3 +1,4 @@
+import { Edge } from "./Edge";
 import { Resources } from "./Resource";
 
 export enum Color {
@@ -45,7 +46,8 @@ export class Player {
     public resources: Resources, 
     readonly cards: DevelopmentCard[], 
     readonly active: boolean = false, 
-    readonly allowedActions: ActionType[] = []) {
+    readonly allowedActions: ActionType[] = [],
+    readonly longestPath: Boolean = false) {
 
     this.contingent = {
       roads: 15,

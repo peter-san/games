@@ -64,7 +64,7 @@ data class DiceAction(val first: Int, val second: Int) : Action(Type.DICE) {
     val value get() = first + second
 }
 
-data class CreateAction(val default: Boolean) : Action(Type.CREATE)
+data class CreateAction(val standard: Boolean) : Action(Type.CREATE)
 data class JoinAction(val color: Color) : Action(Type.JOIN)
 class DeleteAction : Action(Type.DELETE)
 data class CloseAction(val stateChange: Game.State? = null) : Action(Type.CLOSE_MOVE)

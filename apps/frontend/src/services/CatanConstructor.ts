@@ -2,7 +2,7 @@ import { Catan, Dice, ExchangeRequest } from "../types/game";
 import { Area } from "../components/catan-single/model/Area";
 import { Node } from "../components/catan-single/model/Node";
 import { Edge } from "../components/catan-single/model/Edge";
-import { castToMap, notNull } from "../Util";
+import { castToMap, notNull } from '../Util';
 import { Color, Player, ActionType } from '../components/catan-single/model/Player';
 import { Building, ConstructionType } from "../components/catan-single/model/Construction";
 import { store } from "../store";
@@ -31,13 +31,21 @@ export class CatanConstructor {
 
         let me: Player | undefined = undefined;
         const players: Player[] = [];
+
         this.playerMap.forEach((player, color) => {
+
+            if(!!player.longestPath){
+                player.longestPath.forEach(key => this.edges.get(this.convertEdgeKey(key))!!.longestPath = true)
+            }
+
             const pl = new Player(
                 color,
                 castToMap(player.resources),
                 player.cards,
                 currentMove.color === color,
-                player.allowedActions);
+                player.allowedActions,
+                !!player.longestPath
+                );
             players.push(pl);
 
             if (player.name === myId) {
@@ -58,17 +66,15 @@ export class CatanConstructor {
             edges: Array.from(this.edges.values()),
             players: players,
             me: me,
-            //rolled: lastAction && lastAction.type === 'dice' ? lastAction.first + lastAction.second : undefined,
             state: this.dto.state,
             exchanges: me ? this.findExchangeRequests(currentMove.actions, me['color']) : [],
-            dice: toDice(currentMove.actions.find(act => act.type === ActionType.DICE))
+            dice: toDice(currentMove.actions.find(act => act.type === ActionType.DICE)),
         } as Catan
 
 
         console.log(catan)
         return catan;
     };
-
 
     private findExchangeRequests(actions: Action[], recipient: Color): ExchangeRequest[] {
         const toReq = (type: ExchangeRequestType): ExchangeRequest => {
@@ -171,6 +177,17 @@ export class CatanConstructor {
             }
         });
     };
+
+    private convertEdgeKey = (key: string) => {
+        const regex = new RegExp("(\\d+)([><])(\\d+)")
+        const exp: RegExpExecArray = regex.exec(key)!!
+
+        const horizontal = exp[2] === ">"
+
+        const nodeFromKey = exp[1]+"|"+exp[3]
+        const nodeToKey = (+exp[1] + (horizontal?1:0)) +"|"+(+exp[3]+ (horizontal?0:1))
+        return Edge.key(nodeFromKey, nodeToKey)
+    }
 
 
     private checkPoint(first: Point, second: Point) {

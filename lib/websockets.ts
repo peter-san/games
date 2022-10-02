@@ -11,12 +11,11 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from 'aws-cdk-lib/aws-events-targets';
-import { ICertificate } from "aws-cdk-lib/aws-certificatemanager";
+import { Certificate, ICertificate } from "aws-cdk-lib/aws-certificatemanager";
 // import * as path from "path";
 
 interface WebsocketApiStackProps extends cdk.StackProps {
     userPool: cognito.UserPool
-    certificate: ICertificate
 }
 
 export class WebsocketApiStack extends cdk.Stack {
@@ -25,6 +24,12 @@ export class WebsocketApiStack extends cdk.Stack {
 
     constructor(scope: Construct, id: string, props: WebsocketApiStackProps) {
         super(scope, id, props);
+
+        const certificate = Certificate.fromCertificateArn(
+            this,
+            "Certificate",
+            "arn:aws:acm:eu-north-1:169119119606:certificate/7059c4d1-70c1-456d-9ce7-25ba9e000cde"
+          )
 
         const connect = new lambdaNodejs.NodejsFunction(this, "Connect", {
             handler: "connectionHandler",
@@ -68,7 +73,7 @@ export class WebsocketApiStack extends cdk.Stack {
         });
 
         const domainName = new apigwv2.DomainName(this, "Domain", {
-            certificate: props.certificate,
+            certificate: certificate,
             domainName: "ws.petersan.de"
         })
       

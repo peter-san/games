@@ -42,7 +42,7 @@ class RouterConfig(
     }
 
     data class GameJoinRequest(val color: Color)
-    data class NewGameRequest(val standard: Boolean = true, val color: Color)
+    data class NewGameRequest(val standard: Boolean, val color: Color)
 
     data class ExchangeRequest(val recipient: Color, val resources: Resources)
     data class ExchangeResponse (val accepted: Boolean)
@@ -68,7 +68,7 @@ class RouterConfig(
             "GET /healthcheck" -> "i'm there".apply { println(this) }
 
             get("") -> gamesService.all()
-            post("") -> body(NewGameRequest::class.java).run { gamesService.createGame(user(),color, standard)}
+            post("") -> body(NewGameRequest::class.java).let { gamesService.createGame(user(),it.color, it.standard)}
 
 
             get("/{id}") -> catanService.game(id())

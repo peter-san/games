@@ -68,6 +68,18 @@ export class AuthStack extends cdk.Stack {
             password: 'password4',
         });
 
+        new UserPoolUser(this, 'Andy', {
+            userPool: this.userPool,
+            username: 'andy',
+            password: 'cheater666',
+        });
+
+        new UserPoolUser(this, 'Mischa', {
+            userPool: this.userPool,
+            username: 'mischa',
+            password: 'mischa111',
+        });
+
 
         new cdk.CfnOutput(this, "CognitoUserPoolId", {
             value: userPool.userPoolId,

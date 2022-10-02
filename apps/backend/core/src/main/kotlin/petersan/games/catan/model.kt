@@ -143,7 +143,10 @@ data class Player(
     val cities: MutableList<Point> = mutableListOf(),
     val roads: MutableList<Line> = mutableListOf(),
     val cards: MutableList<DevelopmentCard> = mutableListOf(),
-    var allowedActions: List<Action.Type> = emptyList()
+    var allowedActions: List<Action.Type> = emptyList(),
+    //var points: Int = 0,
+    var biggestArmy: Boolean = false,
+    var longestPath: List<EdgeKey>? = null
 )
 
 data class DevelopmentCard(val type: Type, var played: Boolean = false) {
