@@ -12,6 +12,7 @@ import { useState } from 'react';
 import { useTypedSelector } from "../../hooks/useTypedSelector";
 import { ActionType, CardType } from "../catan-single/model/Player";
 import { useActions } from "../../hooks/useActions";
+import { ActionsPanel } from './gamePanel/ActionsPanel';
 
 
 function GameField({
@@ -99,32 +100,36 @@ function GameField({
 
 
   return (
-    <div className={classes.Field}>
+    <>
 
-      { game.dice ? (<div style = {{color: 'yellow', fontSize: 30}}>{game.dice?.first + " " +game.dice?.second}</div>): undefined }
 
-      {game.fields.map((area, index) => (
-        <Tile
-          area={area}
-          key={area.key()}
-          activated={game.dice?.sum() === area.value} //{dicedAreas.has(area)}
-          onRobberSelect={robber ? moveRobberF: undefined}
-        />
-      ))}
+      <div className={classes.Field} >
+  
+        { game.dice ? (<div style = {{color: 'yellow', fontSize: 30}}>{game.dice?.first + " " +game.dice?.second}</div>): undefined }
 
-      {game.edges.map((edge) => (
-        <Street edge={edge} key={edge.key()} onBuy={edgeSelected(edge)} selected = {edge === firstEdge}/>
-      ))}
+        {game.fields.map((area, index) => (
+          <Tile
+            area={area}
+            key={area.key()}
+            activated={game.dice?.sum() === area.value} //{dicedAreas.has(area)}
+            onRobberSelect={robber ? moveRobberF: undefined}
+          />
+        ))}
 
-      {game.nodes.map((node, index) => (
-        <Place
-          node={node}
-          key={node.key()}
-          activated={false} //{selectedCities.has(node)}
-          onBuy={nodeSelected(node)}
-        />
-      ))}
-    </div>
+        {game.edges.map((edge) => (
+          <Street edge={edge} key={edge.key()} onBuy={edgeSelected(edge)} selected = {edge === firstEdge}/>
+        ))}
+
+        {game.nodes.map((node, index) => (
+          <Place
+            node={node}
+            key={node.key()}
+            activated={false} //{selectedCities.has(node)}
+            onBuy={nodeSelected(node)}
+          />
+        ))}
+      </div>
+    </>
   );
 }
 

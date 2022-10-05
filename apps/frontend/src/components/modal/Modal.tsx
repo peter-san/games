@@ -2,7 +2,7 @@ import React from "react";
 import cl from "./Modal.module.scss";
 
 export const Modal = ({ children, visible, setVisible }: any) => {
-  const rootClasses = [cl.modal]
+  const rootClasses = ["modal", cl.modal]
 
   if (visible) {
     rootClasses.push(cl.active)

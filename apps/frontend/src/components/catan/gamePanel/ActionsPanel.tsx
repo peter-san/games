@@ -11,6 +11,9 @@ import CardsDialog from '../modal/CardsDialog';
 import DevelopmentCardDialog from '../modal/DevelopmentCardDialog';
 import { Resource } from '../../catan-single/model/Resource';
 import { toast } from 'react-toastify';
+import cl from './ActionsPanel.module.scss'
+import { GiKnightBanner } from "react-icons/gi";
+import { join } from '../../../Util';
 
 export const ActionsPanel = ({game}: {game: Catan}) => {
 
@@ -47,11 +50,13 @@ export const ActionsPanel = ({game}: {game: Catan}) => {
 
     const me = game.me!!
 
-    const buttonStyle = {verticalAlign: -2, marginRight: 3}
-
     const cardsActions = [ActionType.BUY_CARD, ActionType.PLAY_KNIGHT,ActionType.PLAY_MONOPOLE,ActionType.PLAY_INVENTION,ActionType.PLAY_ROADS]
 
     console.log(me.allowedActions)
+
+    const colorStyle = {
+        // color: me.color
+    }
 
     return (
         <>
@@ -93,14 +98,27 @@ export const ActionsPanel = ({game}: {game: Catan}) => {
                 }} amount={1} />
             </Modal>: undefined}
 
-            <span > 
-                <Button style={buttonStyle} icon={<FontAwesomeIcon icon={faDice}/>} onClick={() => roll(id)} disabled = {!me.can(ActionType.DICE)} />                      
-                <Button style={buttonStyle} icon={<FontAwesomeIcon icon={faCartShopping} />} onClick={() => setMarketModal(true)} disabled = {!me.can(ActionType.MARKET)}></Button>
-                <Button style={buttonStyle} icon={<FontAwesomeIcon icon={faSdCard} />} onClick={() => setCardsModal(true)} disabled = {!me.canAny(cardsActions)}></Button>
-                {/* <Button style={buttonStyle} icon={<FontAwesomeIcon icon={faSdCard} />} onClick={() => buyCardAction(id)} disabled = {!me.can(ActionType.BUY_DEVELOPMENT_CARD)}></Button> */}
-                <Button style={buttonStyle} icon={<FontAwesomeIcon icon={faCheck} />} onClick={() => closeMove(id)} disabled = {!me.can(ActionType.CLOSE)}></Button>
-            </span>
+
+            <div className={join(cl.background, cl.backgroundBorder)} style = {colorStyle}/>
+            <div className={cl.background} />
+
+            
+            <div className={cl.buttons}>
+                
+                <button className={cl.b1} onClick={() => setCardsModal(true)} disabled = {!me.canAny(cardsActions)}><FontAwesomeIcon icon={faSdCard} style = {colorStyle}/></button>
+                <button className={cl.b2} onClick={() => setMarketModal(true)} disabled = {!me.can(ActionType.MARKET)}><FontAwesomeIcon icon={faCartShopping} style = {colorStyle}/></button>
+                <button className={cl.b3} onClick={() => roll(id)} disabled = {!me.can(ActionType.DICE)} ><FontAwesomeIcon icon={faDice} style = {colorStyle}/></button>        
+                <button className={cl.b4} onClick={() => closeMove(id)} disabled = {!me.can(ActionType.CLOSE)}><FontAwesomeIcon icon={faCheck} style = {colorStyle}/></button>
+            </div>
+
+            
+            {/* <div > */}
+                <GiKnightBanner className={join(cl.banner, !me.active ? "disabled": undefined)} style={{color: me.color }}/>
+                {/* </div> */}
+
+            {/* </div> */}
         </>
 
     )
 }
+// verticalAlign: -2, marginRight: 3

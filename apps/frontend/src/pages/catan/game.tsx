@@ -40,6 +40,7 @@ const CatanGamePage: FC = () => {
   }
 
   if (game) {
+
     return (<Layout style={{height: '100%'}} > 
       <Layout.Header className="site-layout-background" style={{padding: 0}}><NavBar game={game} /></Layout.Header>
       <Layout.Content>

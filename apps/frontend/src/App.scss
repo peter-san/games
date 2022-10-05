@@ -5,29 +5,13 @@ body,
 #root,
 .App {
   height: 100%;
+  // overflow: hidden;
 }
 
 
 .site-layout-background {
   background: white;
 }
-
-.catan-game {
-  background-color: green;
-
-  width: 100%;
-  height: 100%;
-}
-
-
- .main-field {
-  display: flex;
-  background: lightblue;
-  background-image: url("static/image/sea.jpg");
-  background-size: 15%;
-  width: 100%;
-  height: 100%;
-} 
 
 .player {
   background-color: aquamarine;
