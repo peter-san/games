@@ -60,16 +60,15 @@ class DevelopmentCardService(games: GameRepository, template: Notifier, random: 
         KnightPlayedAction(position)
     }
 
-
     private fun biggestArmy(game: Game): Color? {
 
         val biggestArmies = game.players
             .map { it.key to it.value.cards.count { card -> card.type == DevelopmentCard.Type.KNIGHT && card.played } }
-            .filter { it.second < 3 }
+            .filter { it.second >= 3 }
             .groupBy { it.second }
-            .maxBy { it.key }.value
+            .maxByOrNull { it.key }?.value
 
-        return if (biggestArmies.isEmpty() || biggestArmies.size > 1) null else biggestArmies.first().first
+        return if (biggestArmies.isNullOrEmpty() || biggestArmies.size > 1) null else biggestArmies.first().first
     }
 
     fun playMonopole(id: Int, user: String, resource: Resource) = verifiedAction(id, user, PLAY_MONOPOLE) { ctx ->

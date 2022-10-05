@@ -16,7 +16,7 @@ interface GameRepository {
 class InMemoryRepository : GameRepository {
     private val games = listOf(
         GameFactory().produce(0),
-        GameFactory().produce(1, true).apply {
+        GameFactory().produce(1, true, mapOf(Color.RED to "1")).apply {
             player(Color.RED).cards += DevelopmentCard(DevelopmentCard.Type.KNIGHT, false)
             player(Color.RED).cards += DevelopmentCard(DevelopmentCard.Type.KNIGHT, false)
             player(Color.RED).cards += DevelopmentCard(DevelopmentCard.Type.KNIGHT, false)
@@ -33,6 +33,10 @@ class InMemoryRepository : GameRepository {
                 Resource.GRAIN to 10,
                 Resource.LUMBER to 10,
                 Resource.BRICK to 10)
+
+            //state = Game.State.CREATION
+            updateAllowedActions()
+            //
         },
         GameFactory().produce(2)
     ).associateBy { it.id!! }.toMutableMap()

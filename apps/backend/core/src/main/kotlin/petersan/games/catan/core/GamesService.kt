@@ -48,8 +48,6 @@ class GamesService(games: GameRepository,  notifier: Notifier, random: Random = 
 
     fun deleteGame(id: Int, user: String) {
         val game = find(id)
-        val color = getColor(game, user)
-
         check(game.moves.first().color === getColor(game, user)) {"user $user isn't owner"}
         games.delete(game)
         notifier.deleted(game)

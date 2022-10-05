@@ -10,7 +10,7 @@ import * as targets from 'aws-cdk-lib/aws-events-targets';
 import { Duration } from "aws-cdk-lib";
 
 export interface LambdaProps extends cdk.StackProps {
-    table: dynamodb.Table
+    //table: dynamodb.Table
     eventBus: events.EventBus
   }
 
@@ -21,23 +21,42 @@ export class LambdaStack extends cdk.Stack {
     constructor(scope: Construct, id: string, props: LambdaProps) {
         super(scope, id, props);
 
-        this.backend = new lambda.Function(this, "Dummy", {
-            handler: "org.springframework.cloud.function.adapter.aws.FunctionInvoker",
+        // this.backend = new lambda.Function(this, "Dummy", {
+        //     handler: "org.springframework.cloud.function.adapter.aws.FunctionInvoker",
+        //     runtime: lambda.Runtime.JAVA_11,
+        //     timeout: cdk.Duration.seconds(30),
+        //     memorySize: 512,
+        //     functionName: 'dummy',
+        
+        //     code: lambda.Code.fromAsset(path.join(__dirname, '/../apps/backend/spring-lambda/build/libs/spring-lambda-all.jar'))
+        // });
+
+
+        this.backend = new lambda.Function(this, "SettlersPureKotlinLamda", {
+            handler: "petersan.games.lambda.pure.Handler",
             runtime: lambda.Runtime.JAVA_11,
             timeout: cdk.Duration.seconds(30),
             memorySize: 512,
-            functionName: 'dummy',
+            functionName: 'settlers-pure-kotlin-lambda',
         
-            code: lambda.Code.fromAsset(path.join(__dirname, '/../apps/backend/spring-lambda/build/libs/spring-lambda-all.jar'))
+            code: lambda.Code.fromAsset(path.join(__dirname, '/../apps/backend/pure-lambda/build/libs/pure-lambda-all.jar'))
+        });
+
+        const gamesTable = new dynamodb.Table(this, "GamesTable", {
+            billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+            removalPolicy: cdk.RemovalPolicy.DESTROY,
+            partitionKey: { name: 'gameId', type: dynamodb.AttributeType.NUMBER },
+
+            pointInTimeRecovery: false,
+            tableName: "LambdaGames"
         });
 
         props.eventBus.grantPutEventsTo(this.backend)
-        props.table.grantReadWriteData(this.backend)
+        gamesTable.grantReadWriteData(this.backend)
 
         const healthcheck = new events.Rule(this, "healthCheck", {
             schedule: events.Schedule.rate(Duration.minutes(3)), 
         });
-
 
         healthcheck.addTarget(new targets.LambdaFunction(this.backend, {
             event: events.RuleTargetInput.fromObject({ 

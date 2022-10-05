@@ -52,7 +52,7 @@ fun enoughFor(type: Construction) = forbidden({ "not enough resources for $type"
 }
 
 fun itemsLeft(type: Construction) = forbidden({ "no items of type $type available" }) { ctx ->
-    type.getter(ctx.game.player(ctx.color)).size <= type.maxAmount
+    type.getter(ctx.game.player(ctx.color)).size < type.maxAmount
 }
 
 fun hasCard(type: DevelopmentCard.Type) = forbidden({ "$type needed" })

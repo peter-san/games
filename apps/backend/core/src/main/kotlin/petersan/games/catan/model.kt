@@ -1,6 +1,11 @@
 package petersan.games.catan
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder
+import com.fasterxml.jackson.databind.util.Converter
+import com.fasterxml.jackson.databind.util.StdConverter
 import petersan.games.catan.core.CatanServiceBase
 import petersan.games.catan.model.Resource.*
 import petersan.games.catan.core.action.Action
@@ -101,8 +106,13 @@ value class NodeKey(private val value: String){
     fun toNode() = destruct().let {Point(it.component1().toInt(), it.component2().toInt())}
 }
 
+class EdgeKeyConverter : StdConverter<String, EdgeKey>() {
+    override fun convert(value: String?) = value?.let { EdgeKey(it) } ?: null
+}
+
 @JvmInline
-value class EdgeKey(private val value: String){
+@JsonDeserialize(converter = EdgeKeyConverter::class)
+value class EdgeKey constructor( private val value: String){
     companion object {
         val KEY_REGEX = """(\d+)([><])(\d+)""".toRegex()
     }

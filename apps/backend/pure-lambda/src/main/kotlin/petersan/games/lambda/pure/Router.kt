@@ -1,4 +1,4 @@
-package petersan.games.lambda
+package petersan.games.lambda.pure
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent
 import com.amazonaws.services.lambda.runtime.events.APIGatewayV2HTTPResponse
@@ -12,6 +12,7 @@ import petersan.games.catan.core.ConstructionService
 import petersan.games.catan.core.DevelopmentCardService
 import petersan.games.catan.core.GamesService
 import petersan.games.catan.core.MarketService
+import petersan.games.catan.core.action.CatanValidationException
 import petersan.games.catan.model.Resource
 import petersan.games.catan.model.Resources
 import java.util.UUID
@@ -28,15 +29,23 @@ class RouterConfig(
 
 
     fun router() = { input: APIGatewayProxyRequestEvent ->
-        APIGatewayV2HTTPResponse.builder()
-            .withStatusCode(200)
-            .withBody(jackson.writeValueAsString(route(input)))
-            .withHeaders(mapOf(
-                "Content-Type" to "application/json",
-                "Access-Control-Allow-Origin" to "http://localhost:3000",
-                "Access-Control-Allow-Methods" to "OPTIONS,POST,GET"
-            ))
-            .build()
+        try {
+            APIGatewayV2HTTPResponse.builder()
+                .withStatusCode(200)
+                .withBody(jackson.writeValueAsString(route(input)))
+                .withHeaders(mapOf(
+                    "Content-Type" to "application/json"
+                ))
+                .build()
+        }catch (e: CatanValidationException){
+            APIGatewayV2HTTPResponse.builder()
+                .withStatusCode(e.status.code)
+                .withBody(jackson.writeValueAsString(e))
+                .withHeaders(mapOf(
+                    "Content-Type" to "application/json"
+                ))
+                .build()
+        }
     }
 
     data class GameJoinRequest(val color: Color)
@@ -55,21 +64,23 @@ class RouterConfig(
         fun get(path: String) = "GET /games/catan$path"
         fun post(path: String) = "POST /games/catan$path"
         fun put(path: String) = "PUT /games/catan$path"
+        fun delete(path: String) = "DELETE /games/catan$path"
 
         fun path(param: String) = input.pathParameters[param] ?: throw IllegalArgumentException("no parameter $param")
         fun id() = path("id").toInt()
         fun user() = (input.requestContext.authorizer["claims"] as Map<String,Object>)["cognito:username"] as String
         fun <T> body(clazz: Class<T>): T = jackson.readValue(input.body, clazz)
 
-
-        return when (input.run { "$httpMethod $resource" }) {
+        val path = input.run { "$httpMethod $resource" }
+        println("execution $path")
+        return when (path) {
             "GET /healthcheck" -> "i'm there".apply { println(this) }
 
             get("") -> gamesService.all()
             post("") -> body(NewGameRequest::class.java).let { gamesService.createGame(user(),it.color, it.standard)}
 
-
             get("/{id}") -> catanService.game(id())
+            delete("/{id}") -> gamesService.deleteGame(id(), user())
             put("/{id}/players") -> body(GameJoinRequest::class.java).run { gamesService.joinGame(id(), user(), color)}
 
             post("/{id}/roll") -> catanService.roll(id(), user())
@@ -97,7 +108,7 @@ class RouterConfig(
             post("/{id}/cards/roads") ->  body(RoadsRequest::class.java)
                 .let{cards.playRoads(id(), user(), it.first, it.second)}
 
-            else -> throw IllegalArgumentException("unknown path ")
+            else -> throw IllegalArgumentException("unknown path $path")
         }
     }
 }

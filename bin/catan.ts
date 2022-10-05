@@ -31,13 +31,13 @@ const websockets = new WebsocketApiStack(app, "CatanWebSocketApiStack", {
 })
 
 const lambda = new LambdaStack(app, "CatanLambdaStack", {
-  table: dynamo.table,
+  //table: dynamo.gamesTable,
   eventBus: websockets.eventBus
 })
 
 const api = new APIStack(app, "CatanApiStack", {
   userPool: auth.userPool,
-  dummyFunction: lambda.backend
+  backend: lambda.backend
 })
 
 new FrontendStack(app, "CatanFrontendStack", {})

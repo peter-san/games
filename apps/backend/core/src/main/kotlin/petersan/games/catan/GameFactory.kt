@@ -16,11 +16,12 @@ class GameFactory {
             harbors = HARBORS.map { Harbor(it.key.toLine(), it.value) },
             moves = mutableListOf(Move(1, playerMap.keys.first()))
         ).apply {
-            if (standard) {
+            /*if (standard) {
                 players.map { (color, player) -> initPlayer(color, player, fields) }
                 state = Game.State.PLAY
                 updateAllowedActions()
-            }
+            }*/
+            updateAllowedActions()
         }
     }
 

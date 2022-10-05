@@ -6,11 +6,12 @@ import {Construct} from "constructs";
 import * as agw from "aws-cdk-lib/aws-apigateway";
 import { RestApi } from 'aws-cdk-lib/aws-apigateway';
 import {ICertificate} from 'aws-cdk-lib/aws-certificatemanager';
+import * as path from "path";
 
 interface APIStackProps extends cdk.StackProps {
     userPool: cognito.UserPool;
     //certificate: ICertificate
-    dummyFunction: lambda.Function;
+    backend: lambda.Function;
 }
 
 export class APIStack extends cdk.Stack {
@@ -23,7 +24,6 @@ export class APIStack extends cdk.Stack {
         const authorizer = new agw.CognitoUserPoolsAuthorizer(this, "Authorizer", {
             cognitoUserPools: [props.userPool]
         });
-
 
         // Definition of API Gateway
         this.api = new agw.RestApi(this, "api", {
@@ -49,7 +49,7 @@ export class APIStack extends cdk.Stack {
             //authorizationScopes: ['OpenID']
         }
 
-        const integration = new agw.LambdaIntegration(props.dummyFunction)
+        const integration = new agw.LambdaIntegration(props.backend)
 
         const catan = this.api.root.addResource("games").addResource("catan");
         catan.addMethod("GET", integration);

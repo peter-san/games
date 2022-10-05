@@ -1,4 +1,4 @@
-package petersan.games.lambda.pure
+package petersan.games.lambda
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.regions.Regions

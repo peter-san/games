@@ -1,4 +1,4 @@
-package petersan.games.lambda.pure
+package petersan.games.lambda
 
 
 import com.fasterxml.jackson.annotation.JsonInclude

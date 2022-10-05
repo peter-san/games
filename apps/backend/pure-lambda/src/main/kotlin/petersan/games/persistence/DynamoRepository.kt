@@ -1,13 +1,26 @@
 package petersan.games.web.persistence
 
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDB
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.datamodeling.*
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.stereotype.Component
 import petersan.games.catan.Game
 import petersan.games.catan.GameRepository
 import kotlin.random.Random
 
-@Component
+
+
+class DynamoConfiguration(private val jackson: ObjectMapper){
+
+    fun client() = AmazonDynamoDBClientBuilder.standard().build()
+
+
+    fun mapper(amazonDynamoDB: AmazonDynamoDB) = DynamoDBMapper(amazonDynamoDB)
+
+    fun repository() = DynamoRepository(mapper(client()), jackson)
+}
+
+
 class DynamoRepository(val mapper: DynamoDBMapper, val jackson: ObjectMapper) : GameRepository {
     override fun findAll(): List<Game> {
 
@@ -42,7 +55,7 @@ class DynamoRepository(val mapper: DynamoDBMapper, val jackson: ObjectMapper) : 
 
 
 
-@DynamoDBTable(tableName = "games")
+@DynamoDBTable(tableName = "LambdaGames")
 data class GameEntry(
     @get:DynamoDBHashKey(attributeName = "gameId")
     var gameId: Int? = null,
