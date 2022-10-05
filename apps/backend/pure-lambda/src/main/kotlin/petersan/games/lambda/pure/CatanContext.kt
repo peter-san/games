@@ -1,11 +1,9 @@
-package petersan.games.lambda.pure
+package petersan.games.lambda
 
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.eventbridge.AmazonEventBridge
 import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import petersan.games.catan.*
 import com.amazonaws.services.eventbridge.AmazonEventBridgeClient
 import com.amazonaws.services.eventbridge.model.PutEventsRequest
@@ -13,39 +11,28 @@ import com.amazonaws.services.eventbridge.model.PutEventsRequestEntry
 import com.amazonaws.services.eventbridge.model.PutEventsResult
 import petersan.games.catan.core.*
 
-@Configuration
+
 class CatanContext(private val jackson: ObjectMapper) {
 
-
-    @Bean
     fun repository() = InMemoryRepository()
 
-
-    @Bean
     fun gamesService(repository: GameRepository, notifier: Notifier) = GamesService(repository, notifier)
 
-    @Bean
     fun constructionService(repository: GameRepository, notifier: Notifier) = ConstructionService(repository, notifier)
 
-    @Bean
     fun catanService(repository: GameRepository, notifier: Notifier) = CatanService(repository, notifier)
 
-    @Bean
     fun cardService(repository: GameRepository, notifier: Notifier) = DevelopmentCardService(repository, notifier)
 
-    @Bean
     fun marketService(repository: GameRepository, notifier: Notifier) = MarketService(repository, notifier)
 
-    @Bean
     fun eventBridgeClient() = AmazonEventBridgeClient.builder()
         .withRegion(Regions.EU_NORTH_1)
         .withCredentials(DefaultAWSCredentialsProviderChain())
         .build()
 
-
     data class WebsocketEvent(val path: String, val content: Any)
 
-    @Bean
     fun notifier(eventBridgeClient: AmazonEventBridge) = object : Notifier {
 
         val path = "/topic/games/catan/"

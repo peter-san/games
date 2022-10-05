@@ -1,8 +1,0 @@
-spring:
-  main.banner-mode: off
-
-  cloud.function:
-    definition: router
-    scan.packages: petersan.games.lambda
-
-logging.level.root: INFO
