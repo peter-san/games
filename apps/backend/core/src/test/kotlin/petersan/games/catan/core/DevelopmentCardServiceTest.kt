@@ -43,4 +43,31 @@ class DevelopmentCardServiceTest {
         assertThat(game.player(BLUE).biggestArmy).isTrue
     }
 
+    @Test
+    fun testLongestRoadEvaluation(){
+        game.player(BLUE).apply {
+
+            cards += DevelopmentCard(ROADS, false)
+            roads.addAll(listOf(
+                line("0>0"),
+                line("1>0"),
+                line("2<0")
+            ))
+        }
+
+        game.updateAllowedActions()
+
+        assertThat(game.player(BLUE).longestPath).isNull()
+
+        testee.playRoads(1, "1", line("0<0"), line("0>1"))
+
+        assertThat(game.player(BLUE).longestPath).containsExactlyInAnyOrder(
+            EdgeKey("0>0"),
+            EdgeKey("1>0"),
+            EdgeKey("2<0"),
+            EdgeKey("0<0"),
+            EdgeKey("0>1"),
+        )
+    }
+
 }

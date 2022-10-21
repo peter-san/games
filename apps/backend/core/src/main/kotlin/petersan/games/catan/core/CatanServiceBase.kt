@@ -2,9 +2,7 @@ package petersan.games.catan.core
 
 import petersan.games.catan.*
 import petersan.games.catan.core.action.*
-import petersan.games.catan.core.graph.Edge
-import petersan.games.catan.core.graph.GraphConstructor
-import petersan.games.catan.core.graph.Node
+import petersan.games.catan.core.graph.*
 import kotlin.random.Random
 
 abstract class CatanServiceBase(val games: GameRepository, val notifier: Notifier, val random: Random) {
@@ -54,6 +52,17 @@ abstract class CatanServiceBase(val games: GameRepository, val notifier: Notifie
         action: (context: GameContext) -> Action,
     ): Game = actionContext(id, user, type).let { applyAction(it.game, action(it)) }
 
+
+    private val MIN_AMOUNT = 5
+    protected fun evaluateLongestRoad(players: Map<Color, Player>, graph: Graph){
+
+        val map = players.keys.mapNotNull { graph.longestPath(it)?.run { it to this } ?: null }.toMap()
+        val max = map.maxByOrNull { (c,lp)->lp.length } !!
+        players.values.forEach { it.longestPath = null }
+        if(map.count { (c, lp)-> lp.length == max.value.length } == 1 && max.value.length >= MIN_AMOUNT) {
+            players[max.key]!!.longestPath = max.value.edges()
+        }
+    }
 
     protected fun secondPhaseAction(
         id: Int,

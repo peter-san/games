@@ -109,6 +109,9 @@ class DevelopmentCardService(games: GameRepository, template: Notifier, random: 
         ctx.player.roads += second
         println("${ctx.color} played roads and added two roads $first and $second")
         card.played = true
+
+        evaluateLongestRoad(ctx.game.players, ctx.graph)
+
         RoadsPlayedAction(first, second)
     }
 }

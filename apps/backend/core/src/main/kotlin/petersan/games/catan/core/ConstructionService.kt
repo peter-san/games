@@ -41,17 +41,6 @@ class ConstructionService(games: GameRepository, template: Notifier, random: Ran
         RoadBoughtAction(line)
     }
 
-    val MIN_AMOUNT = 5
-    private fun evaluateLongestRoad(players: Map<Color, Player>, graph: Graph){
-
-        val map = players.keys.mapNotNull { graph.longestPath(it)?.run { it to this } ?: null }.toMap()
-        val max = map.maxByOrNull { (c,lp)->lp.length } !!
-        players.values.forEach { it.longestPath = null }
-        if(map.count { (c, lp)-> lp.length == max.value.length } == 1 && max.value.length >= MIN_AMOUNT) {
-            players[max.key]!!.longestPath = max.value.edges()
-        }
-    }
-
     fun buyTown(id: Int, point: Point, user: String) = verifiedAction(id, user, Action.Type.BUY_TOWN) { context ->
         val node = context.graph.nodes[point.nodeKey()]!!
         require(node.content == null) { "town at ${node.key} already bought" }
