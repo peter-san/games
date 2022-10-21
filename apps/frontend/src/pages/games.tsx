@@ -70,11 +70,11 @@ const Games: FC = () => {
     setSelectedGame(undefined)
   }
 
-    return (<Layout style={{height: '100%'}} > 
+    return (<Layout > 
       <Layout.Header className="site-layout-background" style={{padding: 0}}><NavBar /></Layout.Header>
-      <Layout.Content>
+      <Layout.Content style={{padding: 20}}>
         <Row>
-          <Col span={20} offset={2}>
+          <Col span={22} offset={1}>
             <List
               className="demo-loadmore-list"
               loading={loading}
@@ -82,11 +82,11 @@ const Games: FC = () => {
               //loadMore={loadMore}
               dataSource={games}
               renderItem={(item: Catan) => (
-                <List.Item
+                <List.Item style={{paddingLeft: 20, backgroundColor: "white"}}
                   actions={actions(item)}
                 >
                   <Skeleton avatar title={false} loading={loading} active>
-                    <List.Item.Meta
+                    <List.Item.Meta 
                       //avatar={<Avatar src={item.picture.large} />}
                       title={<Link to={"" + item.id}>{item.id} settler </Link>}
                       description={`state: ${item.state}`}

@@ -7,7 +7,7 @@ export default function ResourcePanel({resources}: {resources: Resources}) {
 
   
     const resource = (res: Resource, amount: number) => 
-        (<span className={cl.resource} key={res}><span className={join(cl.icon, cl[res])}></span><span className="amount">{` x${amount}`}</span></span>)
+        (<span className={cl.resource} key={res}><span className={join(cl.icon, cl[res])}></span><span className="amount">{`${amount}`}</span></span>)
     
 
   return <span className={cl.resources}>

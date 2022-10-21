@@ -50,6 +50,12 @@
       pointer-events: all;
     }
 
+    button:active{
+      border: .1em solid red;
+      color: red;
+      background-color: orange;
+    }
+
     button:disabled{
         border: .1em solid darkgrey;
         color: darkgrey;
