@@ -23,6 +23,6 @@ class VictoryRecognizer {
                 player.cities.size * 2 +
                 player.cards.count { it.type == DevelopmentCard.Type.VICTORY } +
                 (if (player.longestPath != null) 2 else 0) +
-                (if (player.biggestArmy) 2 else 0)
+                (if (player.largestArmy) 2 else 0)
 
 }

@@ -26,7 +26,7 @@ class DevelopmentCardServiceTest {
     }
 
     @Test
-    fun testBiggestArmyEvaluation(){
+    fun testLargestArmyEvaluation(){
         game.player(BLUE).apply {
             cards += DevelopmentCard(KNIGHT, false)
             cards += DevelopmentCard(KNIGHT, false)
@@ -34,13 +34,13 @@ class DevelopmentCardServiceTest {
         }
 
         testee.useKnight(1, "1", Point(0,0))
-        assertThat(game.player(BLUE).biggestArmy).isFalse
+        assertThat(game.player(BLUE).largestArmy).isFalse
 
         testee.useKnight(1, "1", Point(0,0))
-        assertThat(game.player(BLUE).biggestArmy).isFalse
+        assertThat(game.player(BLUE).largestArmy).isFalse
 
         testee.useKnight(1, "1", Point(0,0))
-        assertThat(game.player(BLUE).biggestArmy).isTrue
+        assertThat(game.player(BLUE).largestArmy).isTrue
     }
 
     @Test

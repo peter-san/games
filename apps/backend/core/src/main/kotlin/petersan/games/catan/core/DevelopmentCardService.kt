@@ -51,16 +51,16 @@ class DevelopmentCardService(games: GameRepository, template: Notifier, random: 
         ctx.game.fields.forEach { it.robber = it.x == position.x && it.y == position.y }
         card.played = true
 
-        ctx.game.players.forEach { (_, p) ->p.biggestArmy = false }
-        biggestArmy(ctx.game)?.also {
-            ctx.game.player(it).biggestArmy = true
+        ctx.game.players.forEach { (_, p) ->p.largestArmy = false }
+        largestArmy(ctx.game)?.also {
+            ctx.game.player(it).largestArmy = true
         }
 
         println("${ctx.color} played knight and moved robber to $position")
         KnightPlayedAction(position)
     }
 
-    private fun biggestArmy(game: Game): Color? {
+    private fun largestArmy(game: Game): Color? {
 
         val biggestArmies = game.players
             .map { it.key to it.value.cards.count { card -> card.type == DevelopmentCard.Type.KNIGHT && card.played } }

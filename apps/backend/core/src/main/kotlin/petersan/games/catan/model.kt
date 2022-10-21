@@ -152,7 +152,7 @@ data class Player(
     val cards: MutableList<DevelopmentCard> = mutableListOf(),
     var allowedActions: List<Action.Type> = emptyList(),
     //var points: Int = 0,
-    var biggestArmy: Boolean = false,
+    var largestArmy: Boolean = false,
     var longestPath: List<EdgeKey>? = null
 )
 
