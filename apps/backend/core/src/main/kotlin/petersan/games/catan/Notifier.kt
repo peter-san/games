@@ -2,7 +2,7 @@ package petersan.games.catan
 
 interface Notifier {
 
-    data class Update(val type: Type, val content: Game) {
+    data class Update<T>(val type: Type, val content: T) {
         enum class Type { CREATED, UPDATED, DELETED }
     }
 

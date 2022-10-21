@@ -10,6 +10,7 @@ import com.amazonaws.services.eventbridge.model.PutEventsRequest
 import com.amazonaws.services.eventbridge.model.PutEventsRequestEntry
 import com.amazonaws.services.eventbridge.model.PutEventsResult
 import petersan.games.catan.core.*
+import petersan.games.catan.model.ShallowGame
 
 
 class CatanContext(private val jackson: ObjectMapper) {
@@ -52,8 +53,10 @@ class CatanContext(private val jackson: ObjectMapper) {
                     content = Notifier.Update(type, game))))
                 .withEventBusName("catan-events")
 
-            val request = PutEventsRequest()
-            request.withEntries(requestEntry)
+            val request = PutEventsRequest().withEntries(
+                entry(game, path+game.id, type),
+                entry(game, "$path*", type))
+                //entry(ShallowGame(game.id, game.state, game.players), "$path*", type))
 
             val result: PutEventsResult =
                 eventBridgeClient.putEvents(request) //AmazonEventBridgeClient puts the event onto the event bus
@@ -64,7 +67,14 @@ class CatanContext(private val jackson: ObjectMapper) {
             }
         }
 
+        private fun <T> entry(t: T, path: String, type: Notifier.Update.Type): PutEventsRequestEntry {
+            return PutEventsRequestEntry().withSource("catan-lambda-spring")
+                .withDetailType("game update")
+                .withDetail(jackson.writeValueAsString(WebsocketEvent(
+                    path = path,
+                    content = Notifier.Update(type, t))))
+                .withEventBusName("catan-events")
+        }
     }
-
 }
 

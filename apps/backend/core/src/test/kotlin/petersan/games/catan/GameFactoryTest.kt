@@ -9,7 +9,7 @@ internal class GameFactoryTest {
     val testee = GameFactory()
     @Test
     fun testAreaCreation(){
-        val game = testee.produce(1)
+        val game = testee.produce(1, true)
         assertTrue(game.fields.size === 19)
     }
 }

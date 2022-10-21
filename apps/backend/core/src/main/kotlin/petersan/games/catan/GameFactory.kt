@@ -13,14 +13,9 @@ class GameFactory {
         playerMap: Map<Color, String> = mapOf(RED to "1", ORANGE to "2")): Game {
         return Game(id, state = Game.State.INIT, createAreas(standard),
             playerMap.mapValues{Player(it.value)},
-            harbors = HARBORS.map { Harbor(it.key.toLine(), it.value) },
+            harbors = harbors(standard).map { Harbor(it.key.toLine(), it.value) },
             moves = mutableListOf(Move(1, playerMap.keys.first()))
         ).apply {
-            /*if (standard) {
-                players.map { (color, player) -> initPlayer(color, player, fields) }
-                state = Game.State.PLAY
-                updateAllowedActions()
-            }*/
             updateAllowedActions()
         }
     }
@@ -58,6 +53,16 @@ class GameFactory {
         }
     }
 
+    private fun harbors(standard: Boolean): Map<EdgeKey, Resource?> {
+        if(standard) return HARBORS
+        val resources = HARBORS.values.toList().shuffled()
+        return HARBORS.keys.mapIndexed {ind, key -> key to resources[ind]}.toMap()
+    }
+
+    enum class Direction(val dX: Int, val dY: Int) {
+        RIGHT(2,0), D_RIGHT(1,1), D_LEFT(-1,1), LEFT(-2,0), U_LEFT(-1,-1), U_RIGHT(1,-1);
+        fun successor() = values()[(ordinal + 1) % values().size]
+    }
 
     data class Initialization(val first: Pair<NodeKey, EdgeKey>, val second: Pair<NodeKey, EdgeKey>)
 
@@ -71,6 +76,7 @@ class GameFactory {
             BLUE to Initialization(set("3:4", "3>4"), set("7:4", "7<3")),
             MAGENTA to Initialization(set("3:2", "2>2"), set("8:3", "8<2")),
         )
+
 
         val HARBORS = mapOf(
             "2>0" to null,
@@ -106,6 +112,8 @@ class GameFactory {
             LUMBER, ORE, GRAIN, WOOL,
             BRICK, GRAIN, WOOL
         )
+
+        val N_VALUES: IntArray = intArrayOf(10, 2, 9,10, 8, 5, 11,6,5,8,9,12,6,4,3,4,3,11)
     }
 
     private fun createAreas(standard: Boolean): List<Area> {
@@ -123,17 +131,65 @@ class GameFactory {
 
         for (y in AREA_LINES.indices) {
             for (x in AREA_LINES[y] step 2) {
-                areas.add(if (fields[k] == null) {
-                    desertOffset = -1
-                    Area(x, y, fields[k], -1, true)
-                } else {
-                    Area(x, y, fields[k], VALUES[k + desertOffset], false)
-                })
 
+                areas.add(Area(x, y, fields[k], -2, fields[k] == null))
+//                areas.add(if (fields[k] == null) {
+//                    desertOffset = -1
+//                    Area(x, y, fields[k], -1, true)
+//                } else {
+//                    Area(x, y, fields[k], VALUES[k + desertOffset], false)
+//                })
+//
                 k++
             }
         }
-        return areas
+
+        return applyValues(areas, standard)
+    }
+
+
+
+    private fun applyValues(areas : List<Area>, standard: Boolean): List<Area> {
+        val map = areas.associateBy { Point(it.x,it.y) }
+
+        val values = N_VALUES.copyOf()
+
+        val toReturn = mutableListOf<Area>()
+
+
+        var current = Point(2,0) to Direction.RIGHT
+
+
+
+
+        fun next(direction: Direction) = Point(current.first.x + direction.dX, current.first.y + direction.dY)
+
+        fun check(point: Point) =  map[point] != null && toReturn.none { it.x == point.x && it.y == point.y }
+
+        var robber = 0
+        for(k in areas.indices) {
+            val curArea = map[current.first] ?: throw IllegalStateException("area ${current.first} not found")
+
+            toReturn.add( if(curArea.robber) {
+                robber ++
+                curArea.copy(value = -1)
+            } else curArea.copy(value = values[k-robber]))
+
+            val nextSameDirection = next(current.second)
+
+            current = if(check(nextSameDirection)){
+                nextSameDirection to current.second
+            } else {
+
+                val firstTurn = current.second.successor()
+                val nextAfterFirstTurn = next(firstTurn)
+                if(check(nextAfterFirstTurn)) nextAfterFirstTurn to firstTurn
+                else next(firstTurn.successor()) to firstTurn.successor()
+
+            }
+        }
+
+        return toReturn
     }
 
 }

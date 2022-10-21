@@ -1,10 +1,7 @@
 package petersan.games.catan
 
-import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonValue
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder
-import com.fasterxml.jackson.databind.util.Converter
 import com.fasterxml.jackson.databind.util.StdConverter
 import petersan.games.catan.core.CatanServiceBase
 import petersan.games.catan.model.Resource.*
